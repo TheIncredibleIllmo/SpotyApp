@@ -1,0 +1,15 @@
+<div class="container" style="padding-top: 100px;">
+    <div class="row">
+        <div class="col-12">
+            <input #term type="text" aria-label="Large" class="form-control" (keyup)="searchArtist(term.value)"
+                placeholder="Search artist..." style="width: 100%;" />
+
+            <app-loading class="m-5" *ngIf="loading"></app-loading>
+
+        </div>
+    </div>
+
+    <div class="row" style="padding: 30px">
+        <app-cards *ngIf="!loading" [items]="searchedArtists"></app-cards>
+    </div>
+</div>

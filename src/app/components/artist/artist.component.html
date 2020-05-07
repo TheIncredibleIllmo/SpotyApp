@@ -17,4 +17,36 @@
         </div>
 
     </div>
+
+    <div class="row" style="margin-top: 50px;" *ngIf="!loading">
+        <div class="col">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col" class="spoty-color">Photo</th>
+                        <th scope="col" class="spoty-color">Album</th>
+                        <th scope="col" class="spoty-color">Song</th>
+                        <th scope="col" class="spoty-color">Track</th>
+                        <th scope="col" class="spoty-color">Preview</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+                    <tr *ngFor="let t of artistTopTracks">
+                        <td scope="col">
+                            <img [src]="t.album.images | noimage" class="img-thumb" />
+                        </td>
+                        <td scope="col" class="spoty-color">{{t.album.name}}</td>
+                        <td scope="col" class="spoty-color">{{t.name}}</td>
+                        <th scope="col" class="spoty-color">{{t.track_number}}</th>
+                        <td scope="col" class="spoty-color">
+                            <audio [src]="t.preview_url" controls></audio>
+                        </td>
+
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>

@@ -8,13 +8,13 @@ import { map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class SpotifyService {
-  private spotifyToken: string = "BQCDvCDPk5aU8rdzPMt4Xup9mjjvtQzZ04ng53tw04WcVmuPTe2umol7JsijqORV4Fs_fEjU0f2-Uk_pWM4";
+  private spotifyToken: string = "BQB04NxNFTMOVZrRSecs64Vap1LwWyO1LWnqgmRnR_Kg58-pT3Uz3uiaRborm4sTedeZb6UYwOx1ihgwL2c";
 
   constructor(private httpClient: HttpClient) {
     console.log('Spotify service ready...');
   }
 
-  getQuery(query: string) {
+  get(query: string) {
     const url = `https://api.spotify.com/v1/${query}`;
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.spotifyToken}`
@@ -24,13 +24,13 @@ export class SpotifyService {
   }
 
   getNewReleases() {
-    return this.getQuery('browse/new-releases')
+    return this.get('browse/new-releases')
       .pipe(map(data => data['albums'].items));
   }
 
   searchArtists(text: string) {
     try {
-      return this.getQuery(`search?q=${text}&type=artist&market=US&offset=0&limit=20`)
+      return this.get(`search?q=${text}&type=artist&market=US&offset=0&limit=20`)
         .pipe(map(data => data['artists'].items));
     }
     catch {
@@ -40,12 +40,21 @@ export class SpotifyService {
 
   getArtist(id: string) {
     try {
-      return this.getQuery(`artists/${id}`);
+      return this.get(`artists/${id}`);
     }
     catch {
       return null;
     }
   }
 
+  getArtistTopTracks(authorId: string, country: string) {
+    try {
+      return this.get(`artists/${authorId}/top-tracks?country=${country}`).
+        pipe(map(data => data['tracks']));
+
+    } catch (error) {
+      return null;
+    }
+  }
 
 }

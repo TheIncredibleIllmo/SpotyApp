@@ -2,6 +2,7 @@ import { log } from 'util';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SpotifyService } from '../../services/spotify.service';
+import { AppSettings } from '../../helpers/appSettings';
 
 @Component({
   selector: 'app-artist',
@@ -12,11 +13,21 @@ export class ArtistComponent implements OnInit {
 
   loading: boolean;
   artist: any = {};
+  artistTopTracks: any[] = [];
+
 
   constructor(private router: ActivatedRoute, private spotifyService: SpotifyService) {
-    this.router.params.subscribe((p) => {
-      this.getArtist(p['id']);
-    });
+    try {
+      this.router.params.subscribe((p) => {
+        const authorId = p['id'];
+
+        this.getArtist(authorId);
+        this.getArtistTopTracks(authorId);
+
+
+      });
+    } catch (error) {
+    }
   }
 
   ngOnInit() {
@@ -24,16 +35,19 @@ export class ArtistComponent implements OnInit {
 
   getArtist(id: string) {
     this.loading = true;
-    try {
-      this.spotifyService.getArtist(id)
-        .subscribe(a => {
-          this.artist = a;
-          this.loading = false;
-        });
+    this.spotifyService.getArtist(id)
+      .subscribe(a => {
+        this.artist = a;
+        this.loading = false;
+      });
+  }
 
-    } catch (error) {
-      this.loading = false;
-    }
+  getArtistTopTracks(authorId: string) {
+    this.spotifyService.getArtistTopTracks(authorId, AppSettings.MX_COUNTRY)
+      .subscribe(t => {
+        this.artistTopTracks = t;
+
+      })
   }
 
 }
